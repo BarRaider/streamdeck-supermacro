@@ -28,6 +28,10 @@ namespace SuperMacro.Actions
 
             [JsonProperty(PropertyName = "delay")]
             public string Delay { get; set; }
+
+            [JsonProperty(PropertyName = "isMomentary")]
+            public bool IsMomentary { get; set; }
+            
         }
 
         #region Private Members
@@ -226,7 +230,9 @@ namespace SuperMacro.Actions
 
         private void HandleAutoStop()
         {
-            if (autoStopNum > 0)
+            if (settings.IsMomentary)
+                keyPressed = false;
+            else if (autoStopNum > 0)
             {
                 counter--;
                 if (counter <= 0)
@@ -238,7 +244,7 @@ namespace SuperMacro.Actions
 
         private WriterSettings CreateWriterSettings()
         {
-            return new WriterSettings(false, false, false, false, false, delay, autoStopNum);
+            return new WriterSettings(false, false, false, false, false, false, delay, autoStopNum);
         }
 
 

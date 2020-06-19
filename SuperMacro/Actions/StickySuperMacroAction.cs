@@ -140,7 +140,7 @@ namespace SuperMacro.Actions
 
         private WriterSettings CreateWriterSettings()
         {
-            return new WriterSettings(settings.IgnoreNewline, settings.EnterMode, Settings.RunUntilEnd, settings.KeydownDelay, settings.ForcedMacro, settings.Delay, autoStopNum);
+            return new WriterSettings(settings.IgnoreNewline, settings.EnterMode, Settings.RunUntilEnd, settings.KeydownDelay, settings.ForcedMacro, false, settings.Delay, autoStopNum);
         }
 
         #endregion

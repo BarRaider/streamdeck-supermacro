@@ -194,7 +194,7 @@ namespace SuperMacro.Actions
 
         private WriterSettings CreateWriterSettings()
         {
-            return new WriterSettings(settings.IgnoreNewline, settings.EnterMode, false, settings.KeydownDelay, settings.ForcedMacro, settings.Delay, 0);
+            return new WriterSettings(settings.IgnoreNewline, settings.EnterMode, false, settings.KeydownDelay, settings.ForcedMacro, false, settings.Delay, 0);
         }
 
         #endregion

@@ -22,8 +22,11 @@ namespace SuperMacro.Backend
 
         public int AutoStopNum { get; private set; }
 
-        public WriterSettings(bool ignoreNewLine, bool enterMode, bool runUntilEnd, bool keydownDelay, bool forcedMacro, int delay, int autoStopNum)
+        public bool IsMomentary { get; private set; }
+
+        public WriterSettings(bool ignoreNewLine, bool enterMode, bool runUntilEnd, bool keydownDelay, bool forcedMacro, bool isMomentary, int delay, int autoStopNum)
         {
+            IsMomentary = isMomentary;
             IgnoreNewline = ignoreNewLine;
             EnterMode = enterMode;
             RunUntilEnd = runUntilEnd;
