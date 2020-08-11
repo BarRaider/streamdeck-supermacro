@@ -2,6 +2,15 @@
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
+## New in v1.8.1 (Available on Discord)
+- `Keystroke PTT` now has a `Run Once` option, to only run the command a single time
+- You can now control the output frequency of the `Keystroke PTT` using the delay slider
+- `{{MSCROLLUP}}` and `{{MSCROLLDOWN}}` now support an optional number of clicks to scroll. (See example 13 below)
+- `{{MOUSEXY}}` now supports variables for moving the mouse (see example 14 below)
+- `{{MSAVEPOS}}` now stores the values in variables `$MOUSE_X` and `$MOUSE_Y`
+- New `REPLACE` function allows replacing parts of a variable/string (see usage in `Functions` section and example 15 below)
+- New `NOW` function allows to get the current date and time and format it (see example 16 below)
+
 ## New in v1.8
 - :new: ***FUNCTIONS Support!*** 
 	- `RANDOM` function allows choosing a random number in a customized range
@@ -127,6 +136,35 @@ Note: To find the correct position you can use the Mouse Location action.
 12. Read text from a clipboard and show it on the Stream Deck Key:
 ```
 {{VARSETFROMCLIPBOARD:MyVar}}
+{{SETKEYTITLE:$MyVar}}
+```
+
+13. Scroll the mouse up by 5 clicks and then down by 3 clicks:
+```
+{{MSCROLLUP:5}}
+{{MSCROLLDOWN:3}}
+```
+
+14. Move the mouse to coordinates set from variables:
+```
+{{VARSET:X:100}}
+{{VARSET:Y:400}}
+{{MOUSEXY:$X,$Y}}
+```
+
+15. Repalce all "l"'s with "Z"'s in the string `Hello World` and show it on key
+```
+{{VARSET:XX:Hello World}}
+{{VARSET:A:l}}
+{{VARSET:B:Z}}
+{{FUNC:REPLACE:MyVar:$XX:$A:$B}}
+{{SETKEYTITLE:$MyVar}}
+```
+
+16. Show the current date and time on the key:
+```
+{{FUNC:NOW:MyVar:yyyy-MM-dd 
+HH:mm:ss}}
 {{SETKEYTITLE:$MyVar}}
 ```
 
@@ -539,59 +577,59 @@ Note: Use a `:` between the command name and the arguments
         </tr>
 		<tr>
             <td>PAUSE</td>
-            <td>{PAUSE:XXXX} (XXXX = length in miliseconds)</td>
+            <td>{{PAUSE:XXXX}} (XXXX = length in miliseconds)</td>
         </tr>
 		<tr>
             <td>KeyDown</td>
-            <td>{KeyDown:XXXX} (XXXX = name of key, example {{KeyDown:F1}})</td>
+            <td>{{KeyDown:XXXX}} (XXXX = name of key, example {{KeyDown:F1}})</td>
         </tr>
 		<tr>
             <td>KeyUp</td>
-            <td>{KeyUp:XXXX} (XXXX = name of key, example {{KeyUp:SHIFT}})</td>
+            <td>{{KeyUp:XXXX}} (XXXX = name of key, example {{KeyUp:SHIFT}})</td>
 		</tr>
 		<tr>
 			<td>Input</td>
-			<td>{Input:VarName} Get input from the user and store it in 'VarName'.</td>
+			<td>{{Input:VarName}} Get input from the user and store it in 'VarName'.</td>
 		</tr>
 		<tr>
 			<td>Output</td>
-			<td>{Output:MyVar} Output the input previously gathered into 'MyVar'.</td>
+			<td>{{Output:MyVar}} Output the input previously gathered into 'MyVar'.</td>
 		</tr>
 		<tr>
 			<td>VarSet</td>
-			<td>{VarSet:MyVar:MyValue} set the value `MyValue` into `MyVar`.</td>
+			<td>{{VarSet:MyVar:MyValue}} set the value `MyValue` into `MyVar`.</td>
 		</tr>
 		<tr>
 			<td>OutputToFile</td>
-			<td>{OutputToFile:MyVar:C:\filename.txt} write the contents of the `MyVar` variable into `c:\filename.txt` file.</td>
+			<td>{{OutputToFile:MyVar:C:\filename.txt}} write the contents of the `MyVar` variable into `c:\filename.txt` file.</td>
 		</tr>
 		<tr>
 			<td>VarSetFromFile</td>
-			<td>{VarSetFromFile:MyVar:C:\filename.txt} read the contents of the file specified and store into `MyVar`.</td>
+			<td>{{VarSetFromFile:MyVar:C:\filename.txt}} read the contents of the file specified and store into `MyVar`.</td>
 		</tr>
 		<tr>
 			<td>VarSetFromClipboard</td>
-			<td>{VarSetFromClipboard:MyVar} read the contents of the clipboard and store into `MyVar`.</td>
+			<td>{{VarSetFromClipboard:MyVar}} read the contents of the clipboard and store into `MyVar`.</td>
 		</tr>
 		<tr>
 			<td>VarUnset</td>
-			<td>{VarUnset:MyVar} clears `MyVar`.</td>
+			<td>{{VarUnset:MyVar}} clears `MyVar`.</td>
 		</tr>
 		<tr>
 			<td>VarUnsetAll</td>
-			<td>{VARUNSETALL} clears all variables.</td>
+			<td>{{VARUNSETALL}} clears all variables.</td>
 		</tr>
 		<tr>
 			<td>MSavePos</td>
-			<td>{MSAVEPOS} stores the current mouse cursor position.</td>
+			<td>{{MSAVEPOS}} stores the current mouse cursor position. <br/>The position is stored in variables: $MOUSE_X and $MOUSE_Y</td>
 		</tr>
 		<tr>
 			<td>MLoadPos</td>
-			<td>{MLOADPOS} moves the mouse to the previous set position (when `{MSAVEPOS}` was called).</td>
+			<td>{{MLOADPOS}} moves the mouse to the previous set position (when `{MSAVEPOS}` was called).</td>
 		</tr>
 		<tr>
 			<td>SetKeyTitle</td>
-			<td>{SetKeyTitle:$MyVar} Sets the text on the Stream Deck key to the contents of `MyVar`.</td>
+			<td>{{SetKeyTitle:$MyVar}} Sets the text on the Stream Deck key to the contents of `MyVar`.</td>
 		</tr>
 	</tbody>
 </table>
@@ -663,6 +701,26 @@ Where 'InputParamX' can either be text (10) or another variable ($MyVar)
 			<td>
 			</td>
         </tr>
+		<tr>
+            <td>REPLACE</td>
+            <td>3</td>
+			<td>{{FUNC:REPLACE:MyVar:Hello:He:Y}}<br/>
+			MyVar will have the string: <b>Yello</b><br/><br/>
+			{{VARSET:XX:Hello World}} {{VARSET:A:l}}{{VARSET:B:Z}} {{FUNC:REPLACE:MyVar:$XX:$A:$B}}<br/>
+			MyVar will have the string: <b>HeZZo WorZd</b>
+			</td>
+			<td>
+			</td>
+        </tr>
+		<tr>
+            <td>NOW</td>
+            <td>1</td>
+			<td>{{FUNC:NOW:MyVar:yyyy-MM-dd HH:mm:ss}}<br/>
+			MyVar will have the current date and time.
+			</td>
+			<td>
+			</td>
+        </tr>
 	</tbody>
 </table>
 
@@ -677,83 +735,84 @@ Where 'InputParamX' can either be text (10) or another variable ($MyVar)
         </tr>
 		<tr>
             <td>Mouse Left-Click</td>
-            <td>{LBUTTON}</td>
+            <td>{{LBUTTON}}</td>
         </tr>
 		<tr>
             <td>Mouse Left Double-Click</td>
-            <td>{MLEFTDBLCLICK}</td>
+            <td>{{MLEFTDBLCLICK}}</td>
         </tr>
 		<tr>
             <td>Mouse Left Button Down</td>
-            <td>{MLEFTDOWN}</td>
+            <td>{{MLEFTDOWN}}</td>
         </tr>
 		<tr>
             <td>Mouse Left Button Up</td>
-            <td>{MLEFTUP}</td>
+            <td>{{MLEFTUP}}</td>
         </tr>	
 		<tr>
             <td>Mouse Right-Click</td>
-            <td>{RBUTTON}</td>
+            <td>{{RBUTTON}}</td>
         </tr>
 		<tr>
             <td>Mouse Right Double-Click</td>
-            <td>{MRIGHTDBLCLICK}</td>
+            <td>{{MRIGHTDBLCLICK}}</td>
         </tr>
 		<tr>
             <td>Mouse Right Button Down</td>
-            <td>{MRIGHTDOWN}</td>
+            <td>{{MRIGHTDOWN}}</td>
         </tr>
 		<tr>
             <td>Mouse Right Button Up</td>
-            <td>{MRIGHTUP}</td>
+            <td>{{MRIGHTUP}}</td>
         </tr>
 		<tr>
             <td>Mouse Middle Click</td>
-            <td>{MBUTTON}</td>
+            <td>{{MBUTTON}}</td>
         </tr>
 		<tr>
             <td>Mouse Middle Button Down</td>
-            <td>{MMIDDLEDOWN}</td>
+            <td>{{MMIDDLEDOWN}}</td>
         </tr>
 		<tr>
             <td>Mouse Middle Button Up</td>
-            <td>{MMIDDLEUP}</td>
+            <td>{{MMIDDLEUP}}</td>
         </tr>
 		<tr>
             <td>Mouse Button 4 Click</td>
-            <td>{XBUTTON1}</td>
+            <td>{{XBUTTON1}}</td>
         </tr>
 		<tr>
             <td>Mouse Button 5 Click</td>
-            <td>{XBUTTON2}</td>
+            <td>{{XBUTTON2}}</td>
         </tr>
 		<tr>
             <td>Mouse Scroll Wheel Up</td>
-            <td>{MSCROLLUP}</td>
+            <td>{{MSCROLLUP}}<br/>Optional: Set the number of 'clicks' to scroll up: {{MSCROLLUP:10}} will scroll up 10 clicks</td>
         </tr>
 		<tr>
             <td>Mouse Scroll Wheel Down</td>
-            <td>{MSCROLLDOWN}</td>
+            <td>{{MSCROLLDOWN}}<br/>Optional: Set the number of 'clicks' to scroll down: {{MSCROLLDOWN:3}} will scroll down 3 clicks</td>
         </tr>
 		<tr>
             <td>Mouse Horizontal Scroll Left</td>
-            <td>{MSCROLLLEFT}</td>
+            <td>{{MSCROLLLEFT}}<br/>Optional: Set the number of 'clicks' to scroll left: {{MSCROLLLEFT:3}} will scroll left 3 clicks</td>
         </tr>
 		<tr>
             <td>Mouse Horizontal Scroll Right</td>
-            <td>{MSCROLLRIGHT}</td>
+            <td>{{MSCROLLRIGHT}}<br/>Optional: Set the number of 'clicks' to scroll right: {{MSCROLLRIGHT:3}} will scroll right 3 clicks</td>
         </tr>
 		<tr>
             <td>Mouse Move based on CURRENT position</td>
-            <td>{MOUSEMOVE:X,Y} (Move the cursor by X,Y from current position)</td>
+            <td>{{MOUSEMOVE:X,Y}} (Move the cursor by X,Y from current position)</td>
         </tr>
 		<tr>
-            <td>Mouse Move based on multi-screen resolutions </td>
-            <td>{MOUSEXY:X,Y} (Move the cursor to the X,Y position on the screen. 0,0 is the [top-left] of your primary monitor. Supports both positive and negative values. Use along with the Mouse Location action to easily find the right coordinates on your PC</td>
+            <td>Mouse Move based on multi-screen resolutions</td>
+            <td>{{MOUSEXY:X,Y}} (Move the cursor to the X,Y position on the screen. 0,0 is the [top-left] of your primary monitor. Supports both positive and negative values. Use along with the `Mouse Location` action to easily find the right coordinates on your PC<br/>
+			Supports variables too: {{MOUSEXY:$Var1,$Var2}}</td>
         </tr>
 		<tr>
             <td><b>(DEPRICATED)</b> Mouse Move based on ABSOLUTE position <b>(DEPRICATED)</b> </td>
-            <td>{MOUSEPOS:X,Y} (Move the cursor to the X,Y position on the screen. Values from 0,0 [top-left] to 65535,65535 [bottom-right])</td>
+            <td>{{MOUSEPOS:X,Y}} (Move the cursor to the X,Y position on the screen. Values from 0,0 [top-left] to 65535,65535 [bottom-right])</td>
         </tr>
   </tbody>
 </table>
