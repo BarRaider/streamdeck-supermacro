@@ -2,7 +2,7 @@
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
-## New in v1.8.1 (Available on Discord)
+## New in v1.8.3 (Available on Discord)
 - `Keystroke PTT` now has a `Run Once` option, to only run the command a single time
 - You can now control the output frequency of the `Keystroke PTT` using the delay slider
 - `{{MSCROLLUP}}` and `{{MSCROLLDOWN}}` now support an optional number of clicks to scroll. (See example 14 below)
