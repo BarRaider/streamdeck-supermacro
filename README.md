@@ -138,26 +138,26 @@ Note: To find the correct position you can use the Mouse Location action.
 {{SETKEYTITLE:$MyVar}}
 ```
 
-12. Read text from a clipboard and show it on the Stream Deck Key:
+13. Read text from a clipboard and show it on the Stream Deck Key:
 ```
 {{VARSETFROMCLIPBOARD:MyVar}}
 {{SETKEYTITLE:$MyVar}}
 ```
 
-13. Scroll the mouse up by 5 clicks and then down by 3 clicks:
+14. Scroll the mouse up by 5 clicks and then down by 3 clicks:
 ```
 {{MSCROLLUP:5}}
 {{MSCROLLDOWN:3}}
 ```
 
-14. Move the mouse to coordinates set from variables:
+15. Move the mouse to coordinates set from variables:
 ```
 {{VARSET:X:100}}
 {{VARSET:Y:400}}
 {{MOUSEXY:$X,$Y}}
 ```
 
-15. Repalce all "l"'s with "Z"'s in the string `Hello World` and show it on key
+16. Repalce all "l"'s with "Z"'s in the string `Hello World` and show it on key
 ```
 {{VARSET:XX:Hello World}}
 {{VARSET:A:l}}
@@ -166,7 +166,7 @@ Note: To find the correct position you can use the Mouse Location action.
 {{SETKEYTITLE:$MyVar}}
 ```
 
-16. Show the current date and time on the key:
+17. Show the current date and time on the key:
 ```
 {{FUNC:NOW:MyVar:yyyy-MM-dd 
 HH:mm:ss}}
