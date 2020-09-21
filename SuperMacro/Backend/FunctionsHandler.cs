@@ -22,6 +22,14 @@ namespace SuperMacro.Backend
         //          Honorary Mention
         // Marbles On Stream winner: xntss
         //---------------------------------------------------
+
+
+        /// <summary>
+        /// Function requests have the following format:
+        /// FUNCTION_NAME:OUTPUT_VAR:INPUT_VAR1:INPUT_VAR2:....
+        /// </summary>
+        /// <param name="functionData"></param>
+        /// <param name="dicVariables"></param>
         public static void HandleFunctionRequest(string functionData, Dictionary<string, string> dicVariables)
         {
             if (dicVariables == null)
@@ -81,6 +89,15 @@ namespace SuperMacro.Backend
                     return GetRandom;
                 case "CONCAT":
                     return Concat;
+                case "REPLACE":
+                    return Replace;
+                case "DATETIME":
+                case "NOW":
+                    return GetDateTime;
+                case "MOUSEX":
+                    return GetMouseX;
+                case "MOUSEY":
+                    return GetMouseY;
             }
             return null;
         }
@@ -112,8 +129,7 @@ namespace SuperMacro.Backend
 
         private static string Add(string[] args)
         {
-            double num1, num2;
-            if (!ExtractTwoNumbers(args, out num1, out num2))
+            if (!ExtractTwoNumbers(args, out double num1, out double num2))
             {
                 Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Add: ExtractTwoNumbers failed");
                 return null;
@@ -124,8 +140,7 @@ namespace SuperMacro.Backend
 
         private static string Sub(string[] args)
         {
-            double num1, num2;
-            if (!ExtractTwoNumbers(args, out num1, out num2))
+            if (!ExtractTwoNumbers(args, out double num1, out double num2))
             {
                 Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Sub: ExtractTwoNumbers failed");
                 return null;
@@ -136,8 +151,7 @@ namespace SuperMacro.Backend
 
         private static string Multiply(string[] args)
         {
-            double num1, num2;
-            if (!ExtractTwoNumbers(args, out num1, out num2))
+            if (!ExtractTwoNumbers(args, out double num1, out double num2))
             {
                 Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Multiply: ExtractTwoNumbers failed");
                 return null;
@@ -148,8 +162,7 @@ namespace SuperMacro.Backend
 
         private static string Divide(string[] args)
         {
-            double num1, num2;
-            if (!ExtractTwoNumbers(args, out num1, out num2))
+            if (!ExtractTwoNumbers(args, out double num1, out double num2))
             {
                 Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Divide: ExtractTwoNumbers failed");
                 return null;
@@ -165,8 +178,7 @@ namespace SuperMacro.Backend
 
         private static string GetRandom(string[] args)
         {
-            double num1, num2;
-            if (!ExtractTwoNumbers(args, out num1, out num2))
+            if (!ExtractTwoNumbers(args, out double num1, out double num2))
             {
                 Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest GetRandom: ExtractTwoNumbers failed");
                 return null;
@@ -186,7 +198,37 @@ namespace SuperMacro.Backend
             return String.Join("", args);
         }
 
+        private static string Replace(string[] args)
+        {
+            if (args.Length != 3)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Replace: Invalid number of parameters");
+                return String.Empty;
+            }
 
+            return args[0].Replace(args[1], args[2]);
+        }
+
+        private static string GetDateTime(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                args[0] = String.Join(":", args);
+                Logger.Instance.LogMessage(TracingLevel.WARN, $"HandleFunctionRequest GetDateTime: Received too many params, assuming it's part of the format {args[0]}");
+            }
+
+            return DateTime.Now.ToString(args[0]);
+        }
+
+        private static string GetMouseX(string[] args)
+        {
+            return System.Windows.Forms.Cursor.Position.X.ToString();
+        }
+
+        private static string GetMouseY(string[] args)
+        {
+            return System.Windows.Forms.Cursor.Position.Y.ToString();
+        }
 
     }
 }

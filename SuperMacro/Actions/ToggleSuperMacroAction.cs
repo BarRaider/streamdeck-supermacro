@@ -96,6 +96,7 @@ namespace SuperMacro.Actions
             {
                 Settings = PluginSettings.CreateDefaultSettings();
                 Connection.SetSettingsAsync(JObject.FromObject(Settings));
+                SaveSettings();
             }
             else
             {

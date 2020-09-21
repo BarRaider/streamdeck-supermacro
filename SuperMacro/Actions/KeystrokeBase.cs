@@ -200,13 +200,13 @@ namespace SuperMacro.Actions
             }
         }
 
-        private void SimulateExtendedMacro(VirtualKeyCodeContainer keyCode)
+        private async void SimulateExtendedMacro(VirtualKeyCodeContainer keyCode)
         {
             Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} SimulateExtendedMacro");
             while (keyPressed || forceOneRound)
             {
                 forceOneRound = false;
-                ExtendedMacroHandler.HandleExtendedMacro(iis, keyCode, CreateWriterSettings(), null);
+                await ExtendedMacroHandler.HandleExtendedMacro(iis, keyCode, CreateWriterSettings(), null);
                 Thread.Sleep(delay);
                 HandleAutoStop();
             }

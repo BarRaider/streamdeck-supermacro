@@ -110,7 +110,7 @@ namespace SuperMacro.Actions
 
         protected void SendInput(string inputText, WriterSettings writerSettings)
         {
-            textWriter.SendInput(inputText, writerSettings, SetKeyTitle);
+            _ = textWriter.SendInput(inputText, writerSettings, SetKeyTitle);
         }
 
         protected void SendStickyInput(string inputText, WriterSettings writerSettings)

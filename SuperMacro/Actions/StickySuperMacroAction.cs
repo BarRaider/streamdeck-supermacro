@@ -50,6 +50,7 @@ namespace SuperMacro.Actions
             {
                 Settings = StickyMacroSettings.CreateDefaultSettings();
                 Connection.SetSettingsAsync(JObject.FromObject(Settings));
+                SaveSettings();
             }
             else
             {

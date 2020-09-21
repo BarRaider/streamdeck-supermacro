@@ -44,6 +44,9 @@ namespace SuperMacro.Actions
 
             [JsonProperty(PropertyName = "longPressInputText")]
             public string LongPressInputText { get; set; }
+
+            [JsonProperty(PropertyName = "longKeypressTime")]
+            public string LongKeypressTime { get; set; }
         }
 
         protected PluginSettings Settings
@@ -65,11 +68,11 @@ namespace SuperMacro.Actions
 
         #region Private Members
 
-        private const int LONG_KEYPRESS_LENGTH = 600;
+        private const int LONG_KEYPRESS_LENGTH_MS = 600;
 
-        private bool keyPressed = false;
-        private DateTime keyPressStart;
         private bool longKeyPressed = false;
+        private int longKeypressTime = LONG_KEYPRESS_LENGTH_MS;
+        private readonly System.Timers.Timer tmrRunLongPress = new System.Timers.Timer();
         private string secondaryMacro;
 
         #endregion
@@ -82,21 +85,29 @@ namespace SuperMacro.Actions
             {
                 Settings = PluginSettings.CreateDefaultSettings();
                 Connection.SetSettingsAsync(JObject.FromObject(Settings));
+                SaveSettings();
             }
             else
             {
                 Settings = payload.Settings.ToObject<PluginSettings>();
             }
-            LoadMacros();
+            tmrRunLongPress.Interval = longKeypressTime;
+            tmrRunLongPress.Elapsed += TmrRunLongPress_Elapsed;
+            InitializeSettings();
+        }
+
+        private void TmrRunLongPress_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            LongKeyPress();
         }
 
         public override void KeyPressed(KeyPayload payload)
         {
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Key Pressed {this.GetType()}");
-
-            keyPressed = true;
             longKeyPressed = false;
-            keyPressStart = DateTime.Now;
+
+            tmrRunLongPress.Interval = longKeypressTime > 0 ? longKeypressTime : LONG_KEYPRESS_LENGTH_MS;
+            tmrRunLongPress.Start();
 
             if (!InputRunning)
             {
@@ -106,7 +117,8 @@ namespace SuperMacro.Actions
 
         public override void KeyReleased(KeyPayload payload)
         {
-            keyPressed = false;
+            tmrRunLongPress.Stop();
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"Key Released {this.GetType()}");
             if (!longKeyPressed) // Take care of the short keypress
             {
                 Logger.Instance.LogMessage(TracingLevel.INFO, $"Short Keypress {this.GetType()}");
@@ -114,7 +126,7 @@ namespace SuperMacro.Actions
                 {
                     ForceStop = true;
                 }
-                else
+                else // Start the short press macro
                 {
                     ForceStop = false;
                     SendInput(primaryMacro, CreateWriterSettings());
@@ -125,20 +137,13 @@ namespace SuperMacro.Actions
         public override void OnTick()
         {
             base.OnTick();
-
-            if (keyPressed)
-            {
-                int timeKeyWasPressed = (int)(DateTime.Now - keyPressStart).TotalMilliseconds;
-                if (timeKeyWasPressed >= LONG_KEYPRESS_LENGTH)
-                {
-                    LongKeyPress();
-                }
-            }
         }
 
 
         public override void Dispose()
         {
+            tmrRunLongPress.Stop();
+            tmrRunLongPress.Elapsed -= TmrRunLongPress_Elapsed;
             Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
         }
 
@@ -154,7 +159,7 @@ namespace SuperMacro.Actions
                 Settings.Delay = CommandTools.RECOMMENDED_KEYDOWN_DELAY;
                 Connection.SetSettingsAsync(JObject.FromObject(Settings));
             }
-            LoadMacros();
+            InitializeSettings();
             SaveSettings();
         }
 
@@ -195,6 +200,17 @@ namespace SuperMacro.Actions
         private WriterSettings CreateWriterSettings()
         {
             return new WriterSettings(settings.IgnoreNewline, settings.EnterMode, false, settings.KeydownDelay, settings.ForcedMacro, settings.Delay, 0);
+        }
+
+        private void InitializeSettings()
+        {
+            if (!Int32.TryParse(Settings.LongKeypressTime, out longKeypressTime))
+            {
+                Settings.LongKeypressTime = LONG_KEYPRESS_LENGTH_MS.ToString();
+                SaveSettings();
+            }
+
+            LoadMacros();
         }
 
         #endregion

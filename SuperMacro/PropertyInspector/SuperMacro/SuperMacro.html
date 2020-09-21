@@ -14,11 +14,15 @@
     <script src="../jquery-3.3.1.min.js"></script>
     <script src="../jquery.highlight-within-textarea.js"></script>
     <script src="../SuperMacro.js"></script>
+    <script src="../General.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
         <details class="message info">
             <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
+        </details>
+        <details class="message">
+            <summary>For tutorials and list of commands <span class="linkspan" onclick="openHelp()">click here</span> </summary>
         </details>
         <div type="checkbox" class="sdpi-item" id="dvLoadFromFiles">
             <div class="sdpi-item-value">
@@ -74,8 +78,20 @@
                 });
             </script>
         </div>
+        <div type="range" class="sdpi-item sdShowTooltip" id="dvLongKeypressTime">
+            <div class="sdpi-item-label" id="longKeypressTimeTitle">Long Keypress Time</div>
+            <div class="sdpi-item-value">
+                <span class="clickable" value="150">150</span>
+                <input type="range" min="150" max="1000" value=150 list="numbers" data-suffix=" ms" class="sdProperty" id="longKeypressTime" oninput="setSettings()">
+                <span class="clickable" value="1000">1000</span>
+                <datalist id="numbers">
+                    <option>1000</option>
+                </datalist>
+                <label for="longKeypressTime" class="rangeLabel"></label>
+            </div>
+        </div>
         <div type="range" class="sdpi-item sdShowTooltip" id="delay_div">
-            <div class="sdpi-item-label">Delay (ms)</div>
+            <div class="sdpi-item-label">Output Delay (ms)</div>
             <div class="sdpi-item-value">
                 <span class="clickable" value="1">1</span>
                 <input type="range" min="1" max="2000" data-suffix=" ms" value="1" class="sdProperty" oninput="setSettings()" id="delay">

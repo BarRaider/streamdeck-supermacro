@@ -2,7 +2,10 @@
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
-## New in v1.8.1 (Available on Discord)
+## New in v1.9
+- Added variable support for `VARSETFROMFILE` and `OUTPUTTOFILE`
+- `MouseXY` and `MouseMove` commands now support both a comma and a colon between the X and Y values (for better consistency with other commands) `{{MOUSEXY:$VarX:$VarY}}`
+- Length of  the long-press in `SuperMacro` action is now customizable
 - `Keystroke PTT` now has a `Run Once` option, to only run the command a single time
 - You can now control the output frequency of the `Keystroke PTT` using the delay slider
 - `{{MSCROLLUP}}` and `{{MSCROLLDOWN}}` now support an optional number of clicks to scroll. (See example 13 below)
@@ -10,6 +13,8 @@
 - `{{MSAVEPOS}}` now stores the values in variables `$MOUSE_X` and `$MOUSE_Y`
 - New `REPLACE` function allows replacing parts of a variable/string (see usage in `Functions` section and example 15 below)
 - New `NOW` function allows to get the current date and time and format it (see example 16 below)
+- Added link to documentation inside the settings
+- Fixed issue with `Output` command messing up text
 
 ## New in v1.8
 - :new: ***FUNCTIONS Support!*** 

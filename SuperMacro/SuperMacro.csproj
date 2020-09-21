@@ -34,21 +34,24 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>brlogo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
-      <HintPath>..\..\..\DotNet\StreamDeck\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
+    <Reference Include="CommandLine, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\CommandLineParser.2.8.0\lib\net461\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\DotNet\StreamDeck\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\DotNet\StreamDeck\packages\NLog.4.7.0\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\NLog.4.7.4\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="streamdeck-client-csharp, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\streamdeck-client-csharp.4.1.1\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
+    <Reference Include="streamdeck-client-csharp, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\streamdeck-client-csharp.4.2.0\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="StreamDeckTools, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\DotNet\StreamDeck\packages\StreamDeck-Tools.2.8.0\lib\net472\StreamDeckTools.dll</HintPath>
+    <Reference Include="StreamDeckTools, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\StreamDeck-Tools.2.9.0\lib\net472\StreamDeckTools.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -111,6 +114,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="brlogo.ico" />
     <Content Include="Images\bg%402x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -166,6 +170,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\commands.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\General.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\SuperMacro\MouseLocation.html">

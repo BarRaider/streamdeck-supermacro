@@ -22,7 +22,7 @@ namespace SuperMacro.Backend
         public bool StickyEnabled { get; set; }
 
 
-        public async void SendInput(string inputText, WriterSettings settings, SetKeyTitle setKeyTitleFunction, bool areMacrosSupported = true)
+        public async Task SendInput(string inputText, WriterSettings settings, SetKeyTitle setKeyTitleFunction, bool areMacrosSupported = true)
         {
             if (String.IsNullOrEmpty(inputText))
             {
@@ -37,7 +37,7 @@ namespace SuperMacro.Backend
             }
 
             InputRunning = true;
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 InputSimulator iis = new InputSimulator();
                 string text = inputText;
@@ -79,7 +79,7 @@ namespace SuperMacro.Backend
                             idx += macro.Length - 1;
                             macro = macro.Substring(1, macro.Length - 2);
 
-                            HandleMacro(macro, settings, setKeyTitleFunction);
+                            await HandleMacro(macro, settings, setKeyTitleFunction);
                         }
                     }
                     else
@@ -107,7 +107,7 @@ namespace SuperMacro.Backend
             }
 
             InputRunning = true;
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 InputSimulator iis = new InputSimulator();
                 string text = inputText;
@@ -148,7 +148,7 @@ namespace SuperMacro.Backend
                                 idx += macro.Length - 1;
                                 macro = macro.Substring(1, macro.Length - 2);
 
-                                HandleMacro(macro, settings, setKeyTitleFunction);
+                                await HandleMacro(macro, settings, setKeyTitleFunction);
                             }
                         }
                         else
@@ -171,7 +171,7 @@ namespace SuperMacro.Backend
             InputRunning = false;
         }
 
-        protected void HandleMacro(string macro, WriterSettings settings, SetKeyTitle setKeyTitleFunction)
+        protected async Task HandleMacro(string macro, WriterSettings settings, SetKeyTitle setKeyTitleFunction)
         {
             List<VirtualKeyCodeContainer> keyStrokes = CommandTools.ExtractKeyStrokes(macro);
 
@@ -200,7 +200,7 @@ namespace SuperMacro.Backend
                     if (keyCode.IsExtended)
                     {
                         Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} HandleExtendedMacro");
-                        ExtendedMacroHandler.HandleExtendedMacro(iis, keyCode, settings, setKeyTitleFunction);
+                        await ExtendedMacroHandler.HandleExtendedMacro(iis, keyCode, settings, setKeyTitleFunction);
                     }
                     else // Normal single keycode
                     {

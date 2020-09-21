@@ -22,13 +22,17 @@ namespace SuperMacro.Actions
                 PluginSettings instance = new PluginSettings
                 {
                     Command = String.Empty,
-                    ReleaseCommand = String.Empty
+                    ReleaseCommand = String.Empty,
+                    RunCommandOnce = false
                 };
                 return instance;
             }
 
             [JsonProperty(PropertyName = "releaseCommand")]
             public string ReleaseCommand { get; set; }
+
+            [JsonProperty(PropertyName = "runCommandOnce")]
+            public bool RunCommandOnce { get; set; }
         }
 
         private PluginSettings Settings
@@ -69,6 +73,13 @@ namespace SuperMacro.Actions
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Key Pressed {this.GetType()}");
             forceOneRound = false;
             keyPressed = true;
+
+            // If should only run once, change the flags
+            if (Settings.RunCommandOnce)
+            {
+                keyPressed = false;
+                forceOneRound = true;
+            }
             RunCommand(Settings.Command);
         }
 

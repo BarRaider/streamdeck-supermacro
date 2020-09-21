@@ -122,14 +122,14 @@ namespace SuperMacro.Backend
             string variableName = variableString.Substring(1).ToUpperInvariant();
             if (!dicVariables.ContainsKey(variableName))
             {
-                Logger.Instance.LogMessage(TracingLevel.ERROR, $"HandleFunctionRequest TryExtractVariable: Variable does not exist {variableName}");
+                Logger.Instance.LogMessage(TracingLevel.WARN, $"HandleFunctionRequest TryExtractVariable: Variable does not exist {variableName}");
                 return variableString;
             }
 
             return dicVariables[variableName];
         }
 
-        public static void HandleExtendedMacro(InputSimulator iis, VirtualKeyCodeContainer macro, WriterSettings settings, SetKeyTitle SetKeyTitleFunction)
+        public static async Task HandleExtendedMacro(InputSimulator iis, VirtualKeyCodeContainer macro, WriterSettings settings, SetKeyTitle SetKeyTitleFunction)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace SuperMacro.Backend
                 // Keyboard commands
                 else if (command == ExtendedCommand.EXTENDED_MACRO_KEY_DOWN || command == ExtendedCommand.EXTENDED_MACRO_KEY_UP)
                 {
-                    HandleKeyboardCommand(command, iis, macro);
+                    HandleKeyboardCommand(iis, macro);
                     return;
                 }
                 // Mouse commands
@@ -168,7 +168,7 @@ namespace SuperMacro.Backend
                          command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET || command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET_FROM_FILE ||
                          command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET_FROM_CLIPBOARD || command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_OUTPUT_TO_FILE)
                 {
-                    HandleVariableCommand(command, iis, macro, settings);
+                    await HandleVariableCommand(command, macro, settings);
                 }
                 else if (command == ExtendedCommand.EXTENDED_MACRO_STREAMDECK_SETKEYTITLE)
                 {
@@ -191,7 +191,7 @@ namespace SuperMacro.Backend
             }
         }
 
-        private static void HandleKeyboardCommand(ExtendedCommand command, InputSimulator iis, VirtualKeyCodeContainer macro)
+        private static void HandleKeyboardCommand(InputSimulator iis, VirtualKeyCodeContainer macro)
         {
             string commandText = CommandTools.ConvertSimilarMacroCommands(macro.ExtendedData.ToUpperInvariant());
             if (string.IsNullOrEmpty(commandText))
@@ -259,9 +259,16 @@ namespace SuperMacro.Backend
                 command == ExtendedCommand.EXTENDED_MACRO_MOUSE_XY)  // Mouse Move
             {
                 string[] mousePos = macro.ExtendedData.Split(',');
+                if (mousePos.Length != 2)
+                {
+                    mousePos = macro.ExtendedData.Split(':');
+                }
                 if (mousePos.Length == 2)
                 {
-                    if (Double.TryParse(mousePos[0], out double x) && Double.TryParse(mousePos[1], out double y))
+                    string mouseX = TryExtractVariable(mousePos[0]);
+                    string mouseY = TryExtractVariable(mousePos[1]);
+
+                    if (Double.TryParse(mouseX, out double x) && Double.TryParse(mouseY, out double y))
                     {
                         if (command == ExtendedCommand.EXTENDED_MACRO_MOUSE_POS)
                         {
@@ -310,16 +317,23 @@ namespace SuperMacro.Backend
 
         private static void HandleMouseScrollCommand(ExtendedCommand command, InputSimulator iis, VirtualKeyCodeContainer macro)
         {
-
             // Scroll UP/DOWN/LEFT/RIGHT
             if (command == ExtendedCommand.EXTENDED_MACRO_SCROLL_UP || command == ExtendedCommand.EXTENDED_MACRO_SCROLL_DOWN)
             {
                 int direction = (command == ExtendedCommand.EXTENDED_MACRO_SCROLL_UP) ? 1 : -1;
+                if (Int32.TryParse(macro.ExtendedData, out int mouseClicks) && mouseClicks > 0)
+                {
+                    direction *= mouseClicks;
+                }
                 iis.Mouse.VerticalScroll(direction);
             }
             else if (command == ExtendedCommand.EXTENDED_MACRO_SCROLL_LEFT || command == ExtendedCommand.EXTENDED_MACRO_SCROLL_RIGHT)
             {
                 int direction = (macro.ExtendedCommand == EXTENDED_COMMANDS_LIST[(int)ExtendedCommand.EXTENDED_MACRO_SCROLL_RIGHT]) ? 1 : -1;
+                if (Int32.TryParse(macro.ExtendedData, out int mouseClicks) && mouseClicks > 0)
+                {
+                    direction *= mouseClicks;
+                }
                 iis.Mouse.HorizontalScroll(direction);
             }
             else
@@ -376,7 +390,7 @@ namespace SuperMacro.Backend
             }
         }
 
-        private static void HandleVariableCommand(ExtendedCommand command, InputSimulator iis, VirtualKeyCodeContainer macro, WriterSettings settings)
+        private static async Task HandleVariableCommand(ExtendedCommand command, VirtualKeyCodeContainer macro, WriterSettings settings)
         {
             string upperExtendedData = macro.ExtendedData.ToUpperInvariant();
 
@@ -403,7 +417,7 @@ namespace SuperMacro.Backend
                 if (dicVariables.ContainsKey(upperExtendedData))
                 {
                     SuperMacroWriter textWriter = new SuperMacroWriter();
-                    textWriter.SendInput(dicVariables[upperExtendedData], settings, null, false);
+                    await textWriter.SendInput(dicVariables[upperExtendedData], settings, null, false);
                 }
                 else
                 {
@@ -434,6 +448,7 @@ namespace SuperMacro.Backend
                     return;
                 }
 
+                // last parameter "2" ensures maximum of two splits!
                 var splitData = macro.ExtendedData.Split(new char[] { ':' }, 2);
                 if (splitData.Length != 2)
                 {
@@ -441,16 +456,17 @@ namespace SuperMacro.Backend
                     return;
                 }
                 string varInput = splitData[1];
+                string fileName = TryExtractVariable(splitData[1]);
 
                 // Set From File but file doesn't exist
-                if (command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET_FROM_FILE && !File.Exists(splitData[1]))
+                if (command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET_FROM_FILE && !File.Exists(fileName))
                 {
-                    Logger.Instance.LogMessage(TracingLevel.WARN, $"Variable SetFromFile called but file does not exist {splitData[1]}");
+                    Logger.Instance.LogMessage(TracingLevel.WARN, $"Variable SetFromFile called but file does not exist {fileName}");
                     return;
                 }
                 else if (command == ExtendedCommand.EXTENDED_MACRO_VARIABLE_SET_FROM_FILE) // File DOES exist
                 {
-                    varInput = File.ReadAllText(splitData[1]);
+                    varInput = File.ReadAllText(fileName);
                 }
 
                 dicVariables[splitData[0].ToUpperInvariant()] = varInput;
@@ -481,7 +497,7 @@ namespace SuperMacro.Backend
                 }
 
                 string variableName = splitData[0].ToUpperInvariant();
-                string fileName = splitData[1];
+                string fileName = TryExtractVariable(splitData[1]);
 
                 // Check if variable exists
                 if (!dicVariables.ContainsKey(variableName))
