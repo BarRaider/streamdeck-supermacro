@@ -682,7 +682,7 @@ Where 'InputParamX' can either be text (10) or another variable ($MyVar)
 		<tr>
             <td>DIV</td>
             <td>2</td>
-			<td>{{FUNC:DIV:MyVar:100:50}} (100/50 and store in MyVar).
+			<td>{{FUNC:DIV:MyVar:&#8203;100:50}} (100/50 and store in MyVar).
 			</td>
 			<td>
 			<i>(Additional examples similar to ADD above)</i></td>
