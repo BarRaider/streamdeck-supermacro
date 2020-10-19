@@ -14,6 +14,13 @@ using WindowsInput.Native;
 
 namespace SuperMacro.Actions
 {
+
+    //---------------------------------------------------
+    //          BarRaider's Hall Of Fame
+    // Subscriber: OneMouseGaming
+    // Subscriber: CyberlightGames
+    // Subscriber: MagicGuitarist
+    //---------------------------------------------------
     [PluginActionId("com.barraider.supermacro")]
     public class SuperMacroAction : SuperMacroBase
     {

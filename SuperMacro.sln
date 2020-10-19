@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.106
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMacro", "SuperMacro\SuperMacro.csproj", "{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMacro", "SuperMacro\SuperMacro.csproj", "{7419BE97-6DC0-4A5F-843E-61299A11CC3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsInput", "..\InputSimulatorPlus\WindowsInput\WindowsInput.csproj", "{3549CD6F-80F8-450F-B99E-CF0A736B1F2A}"
 EndProject
@@ -15,10 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7419BE97-6DC0-4A5F-843E-61299A11CC3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7419BE97-6DC0-4A5F-843E-61299A11CC3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7419BE97-6DC0-4A5F-843E-61299A11CC3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7419BE97-6DC0-4A5F-843E-61299A11CC3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3549CD6F-80F8-450F-B99E-CF0A736B1F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3549CD6F-80F8-450F-B99E-CF0A736B1F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3549CD6F-80F8-450F-B99E-CF0A736B1F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU

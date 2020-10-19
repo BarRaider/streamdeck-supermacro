@@ -92,11 +92,11 @@
     }
   ],
   "Author": "BarRaider",
-  "Description": "Simulates both keyboard and mouse. Advanced functions and variables allow to create complex macros. Handles keystrokes like {{ctrl}{alt}{f1}} or even {{shift}{home}}{{ctrl}{c}} [Select text and copy to clipboard]. Supports a large variety of programs and games",
+  "Description": "Simulates both keyboard and mouse. Advanced functions and variables allow to create complex macros. Handles keystrokes like {{ctrl}{alt}{f1}} or even {{shift}{home}}{{ctrl}{c}} [Select text and copy to clipboard]. Supports a large variety of programs and games.",
   "Name": "SuperMacro",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "1.9",
+  "Version": "2.0",
   "CodePath": "com.barraider.supermacro",
   "Category": "Super Macro [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
@@ -108,6 +108,6 @@
   ],
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "4.8"
+    "MinimumVersion": "4.9"
   }
 }

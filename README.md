@@ -2,6 +2,15 @@
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
+## New in v2.0
+- New `Capture keystroke` feature allows to record the Key Strokes instead of manually typing them into the textbox.
+- New `{{SetClipboard}}` command will set the value of a string or variable into the clipboard
+- New Functions:
+    - `LEN` - Returns the length of the string/variable
+    - `MID` - Returns a substring from the current string/variable
+    - `INDEXOF` - Returns the first 0-based position of a text in the string. Example: `FUNC:INDEXOF:RES:Hello:e` will return 1 into RES
+    - `REVERSE` - Reverses the string/variable
+
 ## New in v1.9
 - Added variable support for `VARSETFROMFILE` and `OUTPUTTOFILE`
 - `MouseXY` and `MouseMove` commands now support both a comma and a colon between the X and Y values (for better consistency with other commands) `{{MOUSEXY:$VarX:$VarY}}`
@@ -171,6 +180,12 @@ Note: To find the correct position you can use the Mouse Location action.
 {{FUNC:NOW:MyVar:yyyy-MM-dd 
 HH:mm:ss}}
 {{SETKEYTITLE:$MyVar}}
+```
+
+18. Set value of variable into the clipboard
+```
+{{VARSET:MyVar:Hello World}}
+{{SETCLIPBOARD:$MyVar}}
 ```
 
 *** More commands below ***
@@ -636,6 +651,10 @@ Note: Use a `:` between the command name and the arguments
 			<td>SetKeyTitle</td>
 			<td>{{SetKeyTitle:$MyVar}} Sets the text on the Stream Deck key to the contents of `MyVar`.</td>
 		</tr>
+		<tr>
+			<td>SetClipboard</td>
+			<td>{{SetClipboard:$MyVar}} Sets the clipboard to the contents of `MyVar`.</td>
+		</tr>
 	</tbody>
 </table>
 
@@ -722,6 +741,42 @@ Where 'InputParamX' can either be text (10) or another variable ($MyVar)
             <td>1</td>
 			<td>{{FUNC:NOW:MyVar:yyyy-MM-dd HH:mm:ss}}<br/>
 			MyVar will have the current date and time.
+			</td>
+			<td>
+			</td>
+        </tr>
+		<tr>
+            <td>LEN</td>
+            <td>1</td>
+			<td>{{FUNC:LEN:MyVar:Hello World}} (Length of the string 'Hello World')<br/>
+			MyVar will have the value <b>11</b>
+			</td>
+			<td>
+			</td>
+        </tr>
+		<tr>
+            <td>MID</td>
+            <td>(Arguments: 1. 0-Based Start Position 2. [Optional] Length)</td>
+			<td>{{FUNC:MID:RES:Hello:2}} RES will have <b>llo</b><br/>
+			{{FUNC:MID:RES:Hello:0:2}} RES will have <b>He</b>
+			</td>
+			<td>
+			</td>
+        </tr>
+		<tr>
+            <td>REVERSE</td>
+            <td>1</td>
+			<td>{{FUNC:REVERSE:MyVar:Hello World}}<br/>
+			MyVar will have the value: <b>dlroW olleH</b>
+			</td>
+			<td>
+			</td>
+        </tr>
+		<tr>
+            <td>INDEXOF</td>
+            <td>2</td>
+			<td>Returns the first 0-based position of a text in the string. <br/>
+			{{FUNC:INDEXOF:RES:Hello:e}} will return <b>1</b> into RES (since e has an index of 1 in the string)
 			</td>
 			<td>
 			</td>

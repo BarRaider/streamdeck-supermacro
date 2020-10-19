@@ -15,6 +15,7 @@
     <script src="../jquery.highlight-within-textarea.js"></script>
     <script src="../SuperMacro.js"></script>
     <script src="../General.js"></script>
+    <script src="../Capture.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -47,6 +48,9 @@
                     <textarea type="textarea" oninput="setSettings()" class="sdProperty" id="inputText"></textarea>
                 </span>
             </div>
+            <details class="message">
+                <summary>Capture Keystroke: <button class="sdpi-item-value max40" id="inputTextCaptureKeystroke" onclick="captureKeystroke('inputText')">Capture</button><button class="sdpi-item-value max40" id="inputTextCancelCapture" onclick="cancelCapture()" style="display:none;">🔴 Cancel</button></summary>
+            </details>
             <script>
                 $('#inputText').highlightWithinTextarea({
                     highlight: /\{(\{[^\{\}]+\})+\}/gi

@@ -14,6 +14,7 @@
     <script src="../jquery-3.3.1.min.js"></script>
     <script src="../jquery.highlight-within-textarea.js"></script>
     <script src="../General.js"></script>
+    <script src="../Capture.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -29,6 +30,9 @@
                 <textarea type="textarea" onblur="setSettings()" class="sdProperty" id="command" placeholder="Either a single character or single KeyStroke" rows="1"></textarea>
             </span>
         </div>
+        <details class="message">
+            <summary>Capture Keystroke: <button class="sdpi-item-value max40" id="commandCaptureKeystroke" onclick="captureKeystroke('command')">Capture</button><button class="sdpi-item-value max40" id="commandCancelCapture" onclick="cancelCapture()" style="display:none;">🔴 Cancel</button></summary>
+        </details>
         <script>
             $('#command').highlightWithinTextarea({
                 highlight: /\{(\{[^\{\}]+\})+\}/gi

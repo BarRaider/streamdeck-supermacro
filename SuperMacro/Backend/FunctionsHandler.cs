@@ -98,6 +98,16 @@ namespace SuperMacro.Backend
                     return GetMouseX;
                 case "MOUSEY":
                     return GetMouseY;
+                case "LEN":
+                    return Length;
+                case "MID":
+                case "SUBSTR":
+                case "SUBSTRING":
+                    return Substring;
+                case "INDEXOF":
+                    return IndexOf;
+                case "REVERSE":
+                    return Reverse;
             }
             return null;
         }
@@ -207,6 +217,69 @@ namespace SuperMacro.Backend
             }
 
             return args[0].Replace(args[1], args[2]);
+        }
+
+
+        // Arg0 = String, Arg1 = Start, Arg2 = Length
+        private static string Substring(string[] args)
+        {
+            if (args.Length != 3 && args.Length != 2)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Substring: Invalid number of parameters");
+                return String.Empty;
+            }
+
+            if (!Int32.TryParse(args[1], out int start))
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"HandleFunctionRequest Substring: invalid START value {args[1]}");
+                return String.Empty;
+            }
+
+            if (args.Length == 3)
+            {
+                if (!Int32.TryParse(args[2], out int length))
+                {
+                    Logger.Instance.LogMessage(TracingLevel.ERROR, $"HandleFunctionRequest Substring: invalid LENGTH value {args[2]}");
+                    return String.Empty;
+                }
+                return args[0].Substring(start, Math.Min(length, args[0].Length - start));
+            }
+            
+            // No length value
+            return args[0].Substring(start);
+        }
+
+        private static string Length(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Length: Invalid number of parameters");
+                return String.Empty;
+            }
+
+            return args[0].Length.ToString();
+        }
+
+        private static string IndexOf(string[] args)
+        {
+            if (args.Length != 2)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest IndexOf: Invalid number of parameters");
+                return String.Empty;
+            }
+
+            return args[0].IndexOf(args[1]).ToString();
+        }
+
+        private static string Reverse(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, "HandleFunctionRequest Reverse: Invalid number of parameters");
+                return String.Empty;
+            }
+
+            return new string(args[0].Reverse().ToArray());
         }
 
         private static string GetDateTime(string[] args)
