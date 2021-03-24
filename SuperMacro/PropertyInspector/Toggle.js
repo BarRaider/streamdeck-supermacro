@@ -22,6 +22,12 @@ document.addEventListener('websocketCreate', function () {
 function showHideSettings(payload) {
     console.log("Show Hide Settings Called");
     setStateSettings("none");
+    setTextAreas("");
+    setFileNames("none");
+    if (payload['loadFromFiles']) {
+        setTextAreas("none");
+        setFileNames("");
+    }
     if (payload['rememberState']) {
         setStateSettings("");
     }
@@ -30,6 +36,16 @@ function showHideSettings(payload) {
 function setStateSettings(displayValue) {
     var dvStateSettings = document.getElementById('dvStateSettings');
     dvStateSettings.style.display = displayValue;
+}
+
+function setTextAreas(displayValue) {
+    var dvTextAreas = document.getElementById('dvTextAreas');
+    dvTextAreas.style.display = displayValue;
+}
+
+function setFileNames(displayValue) {
+    var dvFileNames = document.getElementById('dvFileNames');
+    dvFileNames.style.display = displayValue;
 }
 
 function resetState() {

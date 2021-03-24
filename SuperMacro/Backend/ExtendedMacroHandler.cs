@@ -71,6 +71,14 @@ namespace SuperMacro.Backend
 
         private static readonly Dictionary<VirtualKeyCode, bool> dicRepeatKeydown = new Dictionary<VirtualKeyCode, bool>();
         private static readonly Dictionary<string, string> dicVariables = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> dicPresetVariables = new Dictionary<string, string>()
+        {
+            { "SMCOLON", ":" },
+            { "SMLCB", "{" },
+            { "SMRCB", "}" },
+            { "SMENTER", "\n" },
+            { "SMDOLLAR", "$" }
+        };
 
         public static bool IsExtendedMacro(string macroText, out string macroCommand, out string extendedData)
         {
@@ -90,7 +98,7 @@ namespace SuperMacro.Backend
                         // Handle delimiter
                         if (extendedData.StartsWith(SUPERMACRO_EXTENDED_COMMAND_DELIMITER.ToString()))
                         {
-                            extendedData = extendedData.Substring(SUPERMACRO_EXTENDED_COMMAND_DELIMITER.ToString().Length) ;
+                            extendedData = extendedData.Substring(SUPERMACRO_EXTENDED_COMMAND_DELIMITER.ToString().Length);
                         }
                     }
                     return true;
@@ -121,6 +129,13 @@ namespace SuperMacro.Backend
 
             // Remove the '$' sign and make it uppercase
             string variableName = variableString.Substring(1).ToUpperInvariant();
+
+            // Check if it's a preset variable
+            if (dicPresetVariables.ContainsKey(variableName))
+            {
+                return dicPresetVariables[variableName];
+            }
+
             if (!dicVariables.ContainsKey(variableName))
             {
                 Logger.Instance.LogMessage(TracingLevel.WARN, $"HandleFunctionRequest TryExtractVariable: Variable does not exist {variableName}");
@@ -229,7 +244,7 @@ namespace SuperMacro.Backend
         private static void HandleMouseCommand(ExtendedCommand command, InputSimulator iis, VirtualKeyCodeContainer macro)
         {
             // Mouse Move commands
-            if (command == ExtendedCommand.EXTENDED_MACRO_MOUSE_MOVE || command == ExtendedCommand.EXTENDED_MACRO_MOUSE_POS || 
+            if (command == ExtendedCommand.EXTENDED_MACRO_MOUSE_MOVE || command == ExtendedCommand.EXTENDED_MACRO_MOUSE_POS ||
                 command == ExtendedCommand.EXTENDED_MACRO_MOUSE_XY ||
                 command == ExtendedCommand.EXTENDED_MACRO_MOUSE_STORE_LOCATION || command == ExtendedCommand.EXTENDED_MACRO_MOUSE_RESTORE_LOCATION)
             {
@@ -260,7 +275,7 @@ namespace SuperMacro.Backend
 
         private static void HandleMouseMoveCommand(ExtendedCommand command, InputSimulator iis, VirtualKeyCodeContainer macro)
         {
-            if (command == ExtendedCommand.EXTENDED_MACRO_MOUSE_MOVE || command == ExtendedCommand.EXTENDED_MACRO_MOUSE_POS || 
+            if (command == ExtendedCommand.EXTENDED_MACRO_MOUSE_MOVE || command == ExtendedCommand.EXTENDED_MACRO_MOUSE_POS ||
                 command == ExtendedCommand.EXTENDED_MACRO_MOUSE_XY)  // Mouse Move
             {
                 string[] mousePos = macro.ExtendedData.Split(',');
@@ -423,6 +438,11 @@ namespace SuperMacro.Backend
                 {
                     SuperMacroWriter textWriter = new SuperMacroWriter();
                     await textWriter.SendInput(dicVariables[upperExtendedData], settings, null, false);
+                }
+                else if (dicPresetVariables.ContainsKey(upperExtendedData))
+                {
+                    SuperMacroWriter textWriter = new SuperMacroWriter();
+                    await textWriter.SendInput(dicPresetVariables[upperExtendedData], settings, null, false);
                 }
                 else
                 {

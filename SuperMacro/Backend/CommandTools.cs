@@ -129,8 +129,15 @@ namespace SuperMacro.Backend
                     return "NEXT";
                 case "BREAK":
                     return "PAUSE";
-
-            }
+                case "ARROWDOWN":
+                    return "DOWN";
+                case "ARROWUP":
+                    return "UP";
+                case "ARROWRIGHT":
+                    return "RIGHT";
+                case "ARROWLEFT":
+                    return "LEFT";
+            };
 
             return macroText;
         }

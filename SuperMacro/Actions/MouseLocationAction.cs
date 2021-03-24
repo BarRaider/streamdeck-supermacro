@@ -1,7 +1,9 @@
 ﻿using BarRaider.SdTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WinTools
@@ -31,10 +33,16 @@ namespace WinTools
         }
 
         #region Private Members
+        private const int LONG_KEYPRESS_LENGTH_MS = 500;
+
         private readonly PluginSettings settings;
         private readonly System.Timers.Timer tmrShowMouseLocation;
 
         private bool shownMousePosition = false;
+        private bool keyPressed = false;
+        private bool longKeyPressed = false;
+        private DateTime keyPressStart;
+        private Point currentLocation = new Point(0, 0);
 
         #endregion
         public MouseLocationAction(SDConnection connection, InitialPayload payload) : base(connection, payload)
@@ -68,6 +76,19 @@ namespace WinTools
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Key Pressed {this.GetType()}");
 
             shownMousePosition = true;
+            keyPressed = true;
+            longKeyPressed = false;
+            keyPressStart = DateTime.Now;          
+        }
+
+        public override void KeyReleased(KeyPayload payload) 
+        {
+            keyPressed = false;
+            if (longKeyPressed)
+            {
+                return;
+            }
+
             if (tmrShowMouseLocation.Enabled)
             {
                 tmrShowMouseLocation.Stop();
@@ -76,11 +97,6 @@ namespace WinTools
             {
                 tmrShowMouseLocation.Start();
             }
-           
-        }
-
-        public override void KeyReleased(KeyPayload payload) 
-        {
         }
 
         public async override void OnTick()
@@ -88,6 +104,12 @@ namespace WinTools
             if (!tmrShowMouseLocation.Enabled && !shownMousePosition)
             {
                 await Connection.SetTitleAsync("Press\nto\nstart");
+            }
+            else if (keyPressed && !longKeyPressed && (DateTime.Now - keyPressStart).TotalMilliseconds >= LONG_KEYPRESS_LENGTH_MS)
+            {
+                longKeyPressed = true;
+                SetClipboard($"{currentLocation.X},{currentLocation.Y}");
+                await Connection.ShowOk();
             }
         }
 
@@ -108,20 +130,30 @@ namespace WinTools
 
         private void TmrShowMouseLocation_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Point currentLocation;
             currentLocation = System.Windows.Forms.Cursor.Position;
-            /*
-            if (settings.CoordinatesType == MouseCoordinatesType.SuperMacro)
-            {
-                currentLocation = MouseLocation.ConvertScreenPointToAbsolutePoint(System.Windows.Forms.Cursor.Position);
-            }
-            else
-            {
-                currentLocation = System.Windows.Forms.Cursor.Position;
-            }
-            */
             Connection.SetTitleAsync($"X: {currentLocation.X}\nY: {currentLocation.Y}");
         }
+
+        private void SetClipboard(string text)
+        {
+            Thread staThread = new Thread(
+                delegate ()
+                {
+                    try
+                    {
+                        System.Windows.Forms.Clipboard.SetText(text);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.LogMessage(TracingLevel.ERROR, $"SetClipboard exception: {ex}");
+                    }
+                });
+            staThread.SetApartmentState(ApartmentState.STA);
+            staThread.Start();
+            staThread.Join();
+        }
+
 
         #endregion
     }
