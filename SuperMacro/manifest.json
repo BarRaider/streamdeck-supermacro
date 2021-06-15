@@ -96,7 +96,7 @@
   "Name": "SuperMacro",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "2.1",
+  "Version": "2.2",
   "CodePath": "com.barraider.supermacro",
   "Category": "Super Macro [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
@@ -108,6 +108,6 @@
   ],
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "4.9"
+    "MinimumVersion": "5.0"
   }
 }
