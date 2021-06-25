@@ -1,0 +1,26 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 4
+  ignore:
+  - dependency-name: Newtonsoft.Json
+    versions:
+    - 13.0.1
+  - dependency-name: System.Drawing.Common
+    versions:
+    - 5.0.0
+    - 5.0.1
+    - 5.0.2
+  - dependency-name: NLog
+    versions:
+    - 4.7.7
+    - 4.7.8
+  - dependency-name: StreamDeck-Tools
+    versions:
+    - 3.2.0
+  - dependency-name: streamdeck-client-csharp
+    versions:
+    - 4.3.0
